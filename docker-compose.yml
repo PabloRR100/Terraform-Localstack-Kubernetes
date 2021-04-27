@@ -5,12 +5,15 @@ services:
     image: localstack/localstack:0.12.6
     # 0.11.5 --> TO use custom ports for each service
     ports:
-      - "4566-4599:4566-4599"
+      - 4566:4566
+      - "${EDGE_PORT-4444}:${EDGE_PORT-4444}"
       - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
     environment:
+      - EDGE_PORT=${EDGE_PORT-4444}
       - SERVICES=ec2,s3
       - DEBUG=${DEBUG- }
       - DATA_DIR=${DATA_DIR- }
       - DOCKER_HOST=unix:///var/run/docker.sock
     env_file:
+      - dev.env
       - secrets/compose-common.env
